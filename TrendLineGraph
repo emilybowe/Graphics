@@ -1,0 +1,44 @@
+#Data description 
+#The data I was working with had 3 headings across
+# "Root", "Fruit" and "Grazing"
+# "Root" is Root diameter, in mm.
+# "Fruit" is the seed count produced.
+# "Grazing" is categorical, and is either "Ungrazed" or "Grazed". 
+
+#sample data 
+#Root	 Fruit	Grazing
+#6.225	59.77	Ungrazed
+
+#detach whatever previous file I was using
+detach(rootdata)
+
+#cleanup, read in, attach
+setwd("C:/Users/emily/Desktop/4th year/DataAnalysis")
+rm(list=ls())
+setwd("C:/Users/emily/Desktop/4th year/DataAnalysis")
+rootdata<-read.csv("root.csv", header=TRUE)
+attach(rootdata)
+
+#make sub groups for plot
+Ungrazed<-subset(rootdata, Grazing=="Ungrazed")
+Grazed<-subset(rootdata, Grazing=="Grazed")
+
+#specify colors and point types
+my.colors <- c("black","gray52")
+my.points <- c(16,17)
+
+#plot, make legend
+plot(Root, Fruit, col=my.colors[Grazing], pch=my.points[Grazing], xlab="Root diameter (mm)", ylab="Seeds produced", cex.lab=1.5, cex.axis=1.5, cex=1.2, bty="L", las=1, tcl=0.5 )
+legend("topleft", levels(Grazing), col=my.colors, pch=my.points, lty=0, bty="n", cex=1.5)
+
+#straight trendlines 
+regone<-lm((Fruit~Root), data=Ungrazed)
+regtwo<-lm((Fruit~Root), data=Grazed)
+abline(regone, lty=2)
+abline(regtwo, lty=3) 
+
+# analysing data
+#modone<-glm(formula = Fruit ~ Root + Grazing, data = rootdata)
+#summary(modone)
+
+
