@@ -1,0 +1,58 @@
+#Data description 
+#The data I was working with had 7 headings across
+# "X", "yn", "Treatment", "y1", "y2", "y3" and "yse"
+# "X" is the Time, in weeks. 
+# "yn" is the average egg count for each week, from using the average of "y1", "y2" and "y3" 
+# "Treatment" is categorical, and is either "Control" or "ProMore". 
+# "yse" is the standard deviation calculated using "y1", "y2" and "y3". 
+ 
+#sample data 
+#X yn Treatment	y1 y2 y3  yse
+#1 202 Control 202 201 205 2.08
+ 
+#Alternative options (Analysis, line style alternatives, installation of Hmisc) have been included but #'d
+ 
+#Start of script
+#detach whatever previous file I was using
+detach(promoredata)
+ 
+#cleanup, read in, attach
+rm(list=ls()) 
+setwd("C:/Users/emily/Desktop/4th year/DataAnalysis")
+promoredata<-read.csv("promore.csv", header=TRUE)
+attach(promoredata)
+ 
+#make sub groups for plot
+Controly<-subset(promoredata, Treatment=="Control")
+Promorey<-subset(promoredata, Treatment=="ProMore")
+ 
+#make factors for different line color Treaty=color1, Treatime=color2
+Treaty<-factor(promoredata$Treatment, levels=c("Control","ProMore"))
+Treatime<-factor(promoredata$Treatment,levels=c("Promore", "Control"))
+ 
+#specify colors and point types
+my.colors <- c("firebrick1","dodgerblue")
+my.points <- c(16,17)
+ 
+#plot, make legend
+plot(X, yn, col=my.colors[Treatment], pch=my.points[Treatment], xlab="Time (week number)", ylab="Eggs produced (per week)", cex.lab=1.5, cex.axis=1.5, cex=1.2, bty="L", las=1, tcl=0.5)
+legend("topleft", levels(Treatment), col=my.colors, pch=my.points, lty=0, bty="n", cex=1.5)
+ 
+#For the marker lines (line option 1)
+lines(Controly$X, Controly$yn, pch=my.points [Treaty],col=my.colors[Treaty], lty=1, cex=1.5)
+lines(Promorey$X, Promorey$yn, pch=my.points [Treatime],col=my.colors[Treatime], lty=1, cex=1.5)
+ 
+#If making straight trendlines (line option 2)
+#regone<-lm(yn~X, data=Controly)
+#regtwo<-lm(yn~X, data=Promorey)
+#abline(regone, lty=1, col=my.colors[Treaty])
+#abline(regtwo, lty=1, col=my.colors[Treatime]) 
+ 
+# analysing data
+#modone<-glm(formula = yn~X + Treatment, data = promoredata)
+#summary(modone)
+ 
+#If you don't already have Hisc
+#install.packages("Hmisc")
+require(Hmisc)
+errbar(X, yn, yplus=yn+yse, yminus=yn-yse, add=TRUE, pch=NULL)
