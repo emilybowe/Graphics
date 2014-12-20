@@ -1,0 +1,35 @@
+#data description 
+#the data I was working with had 4 headings across
+# "name", "class", "brainmass" and "bodymass"
+# "name" is the animal name
+# "class" is categorical, and is either "Aves" or "Mammalia"
+# "brainmass" is continuous, and is the brain mass in g
+# "bodymass" is continuous, and is the body mass in g
+ 
+#sample data 
+#name	class	brainmass	bodymass
+#Mole	Mammalia	3.00	1.2200e+02
+ 
+#Start of script
+#detach whatever previous file I was using
+detach(promoredata)
+ 
+#cleanup, read in, attach
+rm(list=ls()) 
+setwd("C:/Users/emily/Desktop/4th year/DataAnalysis")
+brainbody<-read.csv("brainbody.csv", header=TRUE, sep=",")
+attach(brainbody)
+
+#in this boxplot I'm analysing the ratio of brainmass:bodymass
+ratio<-brainmass/bodymass
+
+#plot, outer box type, axis specifications
+boxplot(ratio~class, axes=F,cex.lab=1.2, ylab="Brain mass to body mass ratio", xlab="Class")
+box(bty="L")
+my.at <- seq(from=0, to=max(ratio), by=0.01)
+axis(1,at=1:2,c("Aves","Mammalia"),   font=3, cex.axis=1.2, tcl=0.5)
+axis(2, at=my.at, las=1, tcl=0.5, )
+
+#get means and add as points onto plot
+means<-tapply(brainbody$brainmass/bodymass, brainbody$class, mean)
+points(means,col="black",pch=18)
