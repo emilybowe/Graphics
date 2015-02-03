@@ -1,3 +1,13 @@
+# The data I was working with had 2 columns, "time" and "species"
+# The data was measuring the amount of species found in an area, per time (mins) spent looking. 
+# As there are a finite number of species in an area,
+# at a certain point the rate of species found will slow even though time spent searching increases at the same rate.
+# this relationship needs a line that will reflect that
+
+#sample data
+#	time	species
+#	1000	100
+
 #read in data
 detach(plantdata)
 rm(list=ls()) 
@@ -19,4 +29,3 @@ new.x <- 1:max(x)
 new.x2 <- new.x^2
 quad.y <- predict(m2,list(x=new.x,x2=new.x2))
 lines(new.x,quad.y,lwd=2,lty=2,col=2)
-
